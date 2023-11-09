@@ -1,0 +1,60 @@
+# Import modules
+import pandas as pd
+import matplotlib.pyplot as plt
+# Define all functions
+def plot_line_chart(data):
+    # Assuming 'LastPerformanceReview_Date' is the date column
+    data['LastPerformanceReview_Date'] = pd.to_datetime(
+        data['LastPerformanceReview_Date'])
+    data = data.sort_values('LastPerformanceReview_Date')
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(data['LastPerformanceReview_Date'],
+             data['EngagementSurvey'], marker='o')
+    plt.title('Engagement Survey Trend Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Engagement Survey Score')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+      
+# Corelation between Employee Satisfaction and Engagement Survey
+def plot_scatter_chart(data):
+    plt.figure(figsize=(8, 6))
+    plt.scatter(data['EmpSatisfaction'], data['EngagementSurvey'], alpha=0.7)
+    plt.title(
+        'Relationship between Employee Satisfaction and Engagement Survey')
+    plt.xlabel('Employee Satisfaction')
+    plt.ylabel('Engagement Survey Score')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+# Bar chart to show Engagement Survey Scores by Department
+def plot_bar_chart(data):
+    avg_engagement_per_dept = data.groupby(
+        'DeptID')['EngagementSurvey'].mean()
+    dept_names = data.groupby('DeptID')['DeptID'].unique().apply(
+        lambda x: x[0])
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(dept_names, avg_engagement_per_dept, color='skyblue')
+    plt.title('Average Engagement Survey Scores by Department')
+    plt.xlabel('Department')
+    plt.ylabel('Average Engagement Survey Score')
+
+    for i, score in enumerate(avg_engagement_per_dept):
+        plt.text(i, score + 0.05, f'{score:.2f}', ha='center', color='black')
+
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+   plt.show()
+if __name__ == "__main__":
+    # Load the dataset
+    data = pd.read_csv('HRDataset_v14.csv')
+      
+ # Call functions to plot the charts
+    plot_line_chart(data)
+    plot_scatter_chart(data)
+    plot_bar_chart(data)
